@@ -2,6 +2,16 @@
 
 让我们一起，通过使用TypeScript，创建一个简单的web应用来认识她吧！
 
+<h1>目录</h1>
+
+- [安装TypeScript](#%e5%ae%89%e8%a3%85typescript)
+- [创建你的第一个TypeScript文件！](#%e5%88%9b%e5%bb%ba%e4%bd%a0%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aatypescript%e6%96%87%e4%bb%b6)
+- [编译TypeScript代码](#%e7%bc%96%e8%af%91typescript%e4%bb%a3%e7%a0%81)
+- [类型注释 ( Type annotations )](#%e7%b1%bb%e5%9e%8b%e6%b3%a8%e9%87%8a--type-annotations)
+- [接口 ( Interfaces )](#%e6%8e%a5%e5%8f%a3--interfaces)
+- [类 ( Class )](#%e7%b1%bb--class)
+- [友情提示](#%e5%8f%8b%e6%83%85%e6%8f%90%e7%a4%ba)
+
 # 安装TypeScript
 
 以下两种方法均可获取TypeScript工具：
@@ -34,7 +44,7 @@ let user = "Jane User";
 document.body.textContent = greeter(user);
 ```
 
-# 编译TypeScript代码为可执行的JS代码
+# 编译TypeScript代码
 
 ```js
 // 全局
