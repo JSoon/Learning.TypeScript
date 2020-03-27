@@ -1,0 +1,26 @@
+{
+  "name": "learning.typescript",
+  "version": "1.0.0",
+  "description": "系统学习TypeScript日志，完成时间暂定为1个月。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JSoon/Learning.TypeScript.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JSoon/Learning.TypeScript/issues"
+  },
+  "homepage": "https://github.com/JSoon/Learning.TypeScript#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-html": "^6.0.0",
+    "typescript": "^3.8.3"
+  }
+}
