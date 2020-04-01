@@ -1,3 +1,3 @@
 "use strict";
-var someValue = 1;
+var someValue = "this is a string";
 var strLength = someValue.length;
