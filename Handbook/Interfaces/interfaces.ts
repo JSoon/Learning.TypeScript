@@ -1,6 +1,7 @@
 interface SquareConfig {
   color ? : string;
   width ? : number;
+  // [propName: string]: any;
 }
 
 function createSquare(config: SquareConfig): {
@@ -20,9 +21,11 @@ function createSquare(config: SquareConfig): {
   return newSquare;
 }
 
-let mySquare = createSquare({
-  color: 'red'
-});
+let squareOptions = {
+  colour: "red"
+}
+
+let mySquare = createSquare(squareOptions);
 
 interface Point {
   readonly x: number;
@@ -36,4 +39,6 @@ let p1: Point = {
 p1.x = 5; // error!
 
 let noChange: ReadonlyArray<number> = [1, 2, 3, 4, 5]
-let copyNoChange: Array<number> = noChange.push(3)
+// let copyNoChange: Array<number> = noChange.push(3)
+let canChange: number[] = noChange as number[]
+canChange.push(6)
