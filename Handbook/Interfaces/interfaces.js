@@ -76,3 +76,18 @@ function createClock(ctor, hour, minute) {
 }
 var myClock = createClock(Clock, 12, 0);
 myClock.tick();
+var square = {};
+square.color = "blue";
+square.sideLength = 10;
+function getCounter() {
+    var counter = (function (start) {
+        return String(start);
+    });
+    counter.interval = 123;
+    counter.reset = function () { };
+    return counter;
+}
+var c = getCounter();
+c(10);
+c.reset();
+c.interval = 5.0;
