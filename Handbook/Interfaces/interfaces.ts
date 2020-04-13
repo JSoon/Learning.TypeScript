@@ -131,7 +131,7 @@ interface Square extends Shape {
   sideLength: number;
 }
 
-let square = <Square>{};
+let square = < Square > {};
 square.color = "blue";
 square.sideLength = 10;
 
@@ -147,7 +147,7 @@ function getCounter(): Counter {
     return String(start)
   }) as Counter;
   counter.interval = 123;
-  counter.reset = function () { };
+  counter.reset = function () {};
   return counter;
 }
 
@@ -155,3 +155,47 @@ let c = getCounter();
 c(10);
 c.reset();
 c.interval = 5.0;
+
+
+
+
+
+
+
+class Control {
+  private state: any = 1;
+
+  constructor() {
+
+  }
+}
+
+interface SelectableControl extends Control {
+  select(): void;
+}
+
+class Button extends Control implements SelectableControl {
+  select() {}
+}
+
+const btn = new Button()
+
+class TextBox extends Control {
+  select() {}
+}
+
+const textBox = new TextBox()
+
+
+// Error: Property 'state' is missing in type 'Image'.
+class MyImage extends Button implements SelectableControl {
+  select() {
+    return 'MyImage Class'
+  }
+}
+
+const myImage = new MyImage()
+
+// class Location {
+
+// }

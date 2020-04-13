@@ -91,3 +91,41 @@ var c = getCounter();
 c(10);
 c.reset();
 c.interval = 5.0;
+var Control = /** @class */ (function () {
+    function Control() {
+        this.state = 1;
+    }
+    return Control;
+}());
+var Button = /** @class */ (function (_super) {
+    __extends(Button, _super);
+    function Button() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Button.prototype.select = function () { };
+    return Button;
+}(Control));
+var btn = new Button();
+var TextBox = /** @class */ (function (_super) {
+    __extends(TextBox, _super);
+    function TextBox() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TextBox.prototype.select = function () { };
+    return TextBox;
+}(Control));
+var textBox = new TextBox();
+// Error: Property 'state' is missing in type 'Image'.
+var MyImage = /** @class */ (function (_super) {
+    __extends(MyImage, _super);
+    function MyImage() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MyImage.prototype.select = function () {
+        return 'MyImage Class';
+    };
+    return MyImage;
+}(Button));
+var myImage = new MyImage();
+// class Location {
+// }
