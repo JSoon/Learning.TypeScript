@@ -7,9 +7,9 @@
 - [安装TypeScript](#%e5%ae%89%e8%a3%85typescript)
 - [创建你的第一个TypeScript文件！](#%e5%88%9b%e5%bb%ba%e4%bd%a0%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aatypescript%e6%96%87%e4%bb%b6)
 - [编译TypeScript代码](#%e7%bc%96%e8%af%91typescript%e4%bb%a3%e7%a0%81)
-- [类型注释 ( Type annotations )](#%e7%b1%bb%e5%9e%8b%e6%b3%a8%e9%87%8a--type-annotations)
-- [接口 ( Interfaces )](#%e6%8e%a5%e5%8f%a3--interfaces)
-- [类 ( Classes )](#%e7%b1%bb--classes)
+- [类型注释 (Type annotations)](#%e7%b1%bb%e5%9e%8b%e6%b3%a8%e9%87%8a-type-annotations)
+- [接口 (Interfaces)](#%e6%8e%a5%e5%8f%a3-interfaces)
+- [类 (Classes)](#%e7%b1%bb-classes)
 - [友情提示](#%e5%8f%8b%e6%83%85%e6%8f%90%e7%a4%ba)
 
 ## 安装TypeScript
@@ -67,7 +67,7 @@ let user = "Jane User";
 document.body.textContent = greeter(user);
 ```
 
-## 类型注释 ( Type annotations )
+## 类型注释 (Type annotations)
 
 类型注释是用于标识函数或者变量类型的语法，也是TypeScript最著名的特性之一。在上边的例子中，我们将形参的类型标识为了`string`，即字符串类型。那么问题来了，既然TypeScript最终生成的是JavaScript代码。我们知道，JavaScript是一种弱类型的语言，其变量的类型可以是任意类型的值。那么在这里，我们在调用函数时，传入一个数组变量，像下面这样：
 
@@ -91,7 +91,7 @@ error TS2345: Argument of type 'number[]' is not assignable to parameter of type
 
 > 注意：虽然TypeScript对错误进行了提示，但是仍然生成了对应的.js文件。这意味着即使有 **逻辑错误** 存在，你仍然能够使用TypeScript进行编译。
 
-## 接口 ( Interfaces )
+## 接口 (Interfaces)
 
 让我们进一步编写示例代码。这里将使用接口来描述一个包含`firstName`和`lastName`属性的对象。在TypeScript中，当两种类型的内部结构一致时，他们就能够相互兼容。这种特性使得我们在实现一个接口时，只需要对结构进行声明，而不需要进行具体实现（`implements` clause）。
 
@@ -115,7 +115,7 @@ document.body.textContent = greeter(user);
 
 上述代码中，参数的类型注释为`Person`，由接口定义可知，该参数应该为一个包含两个属性的对象。
 
-## 类 ( Classes )
+## 类 (Classes)
 
 最后，我们将通过引入类的概念来完成最终的示例代码。TypeScript支持JavaScript的新特性（当然支持，这是因为TypeScript是一种JavaScript的强类型超集，并且能够编译成原生JavaScript语句。这句话就挂在[官方首页](https://www.typescriptlang.org/index.html)，大家可自行感受。），例如支持[基于类的面向对象编程](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)特性。
 
