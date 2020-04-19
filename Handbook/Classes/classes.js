@@ -1,26 +1,13 @@
 "use strict";
-var Grid = /** @class */ (function () {
-    function Grid(scale) {
-        this.scale = scale;
+var Greeter = /** @class */ (function () {
+    function Greeter() {
     }
-    Grid.prototype.calculateDistanceFromOrigin = function (point) {
-        var xDist = (point.x - Grid.origin.x);
-        var yDist = (point.y - Grid.origin.y);
-        return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
+    Greeter.prototype.greet = function () {
+        return "Hello, " + this.greeting;
     };
-    Grid.origin = {
-        x: 0,
-        y: 0
-    };
-    return Grid;
+    Greeter.hehe = 'hehe';
+    return Greeter;
 }());
-var grid1 = new Grid(1.0); // 1x scale
-var grid2 = new Grid(5.0); // 5x scale
-console.log(grid1.calculateDistanceFromOrigin({
-    x: 10,
-    y: 10
-}));
-console.log(grid2.calculateDistanceFromOrigin({
-    x: 10,
-    y: 10
-}));
+var myGreeter = Greeter;
+Greeter.hehe = 'haha';
+console.log(myGreeter === Greeter);
