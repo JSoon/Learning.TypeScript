@@ -1,7 +1,3 @@
-interface Add {
-  (baseValue: number, increment: number): number
-}
-
-let myAdd: Add = function(x, y) {
-  return x + y
+function f(this: void, firstName: string) {
+  // make sure `this` is unusable in this standalone function
 }
