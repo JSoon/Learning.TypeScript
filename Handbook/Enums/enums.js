@@ -34,9 +34,5 @@ function printImportant(key, message) {
     }
 }
 printImportant("ERROR", "This is a message");
-var Enum;
-(function (Enum) {
-    Enum[Enum["D"] = 5] = "D";
-})(Enum || (Enum = {}));
-var aaa = Enum.D;
+var aaa = Enum.A;
 var b = Enum.B;
