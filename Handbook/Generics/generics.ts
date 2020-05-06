@@ -1,6 +1,4 @@
 // function identity<T>(arg: T[]): T[] {
-//   arg.length
-//   return arg;
 // }
 
 // const myPassword = identity([12345])
@@ -66,3 +64,19 @@ function createInstance<A extends Animal2>(c: new () => A): A {
 
 createInstance(Lion).keeper.nametag; // typechecks!
 createInstance(Bee).keeper.hasMask; // typechecks!
+
+
+
+
+
+interface Options {
+  color: string;
+  volume: number;
+}
+
+let options = {} as Options;
+options.color = "red";
+options.volume = 11;
+options.vol1ume = 11;
+
+let myCloth;
