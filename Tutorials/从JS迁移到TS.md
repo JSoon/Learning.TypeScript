@@ -133,5 +133,143 @@ let o: any; // 正确
 
 ### 导入模块 (Importing from Modules)
 
+当遇到许多诸如`Cannot find name 'require'.`和`Cannot find name 'define'.`这样的错误时，项目中很可能用到了模块。当然我们能够通过说服TypeScript这些函数是真实存在的，例如：
 
+```ts
+// For Node/CommonJS
+declare function require(path: string): any;
+
+// For RequireJS/AMD
+declare function define(...args: any[]): any;
+```
+
+但这些都属于骚操作，更好的方式是使用TypeScript语法来进行模块引入。
+
+首先，我们需要通过设置TypeScript的`module`标记来授权这些模块系统。合法的模块系统有`commonjs`，`amd`，`system`和`umd`。就像下面这样，将：
+
+```ts
+// Node/CommonJS
+var foo = require("foo");
+foo.doStuff();
+// RequireJS/AMD
+define(["foo"], function(foo) {
+  foo.doStuff();
+});
+```
+
+改写为TypeScript的语法：
+
+```ts
+import foo = require("foo");
+foo.doStuff();
+```
+
+### 获取声明文件 (Getting Declaration Files)
+
+如果你刚开始转换到TypeScript模块引入，很可能遭遇到像`Cannot find module 'foo'.`这样的错误。这种问题很可能是由于我们没有声明文件来描述模块。幸运的是这很好解决。如果TypeScript报错说找不到`lodash`，那么我们只需要使用`npm`来安装声明文件：
+
+```
+npm install -S @types/lodash
+```
+
+如果我们使用的是commonjs以外的模块选项，则需要将moduleResolution选项设置为node。
+
+然后，我们就能够正常地导入`lodash`，并且得到精确地自动补全提示信息。
+
+### 从模块中进行导出 (Exporting from Modules)
+
+通常，从模块进行导出是以为`exports`或者`module.exports`添加属性并赋值的形式来进行：
+
+```js
+module.exports.feedPets = function(pets) {
+  // ...
+};
+```
+
+而TypeScript允许我们使用顶级的`export`声明：
+
+```ts
+export function feedPets(pets) {
+  // ...
+}
+```
+
+有时我们需要覆写整个`exports`对象。即整个导出对象就是一个可立即调用的模块，例如：
+
+```js
+var express = require("express");
+// express模块整个是一个函数，我们可以直接进行调用
+var app = express();
+```
+
+对于这种情况之前可能是这样的：
+
+```js
+function foo() {
+  // ...
+}
+module.exports = foo;
+```
+
+在TypeScript中，我们可以使用`export =`这种结构：
+
+```ts
+function foo() {
+  // ...
+}
+export = foo;
+```
+
+### 参数过多/过少 (Too many/too few arguments)
+
+有事我们会发现调用的函数有太多或者太少的参数。典型来讲，这是一个bug，但是在一些特定的情况下，我们可能已经使用`arguments`对象来获取函数的参数，而不是显式地声明这些参数：
+
+```js
+function myCoolFunction() {
+  // 条件一：
+  // 如果有两个参数并且第二个参数不是数组（这里可能文档写错了，应该是说第二个参数是数组的情况）
+  if (arguments.length == 2 && !Array.isArray(arguments[1])) {
+    var f = arguments[0];
+    var arr = arguments[1];
+    // ...
+  }
+  // 条件二：
+  // ...
+}
+
+// 满足条件一：
+myCoolFunction(
+  function(x) {
+    console.log(x);
+  },
+  [1, 2, 3, 4]
+);
+// 满足条件二：
+myCoolFunction(
+  function(x) {
+    console.log(x);
+  },
+  1,
+  2,
+  3,
+  4
+);
+```
+
+基于上述情况，我们需要使用TypeScript对`myCoolFunction`进行函数重载：
+
+```ts
+function myCoolFunction(f: (x: number) => void, nums: number[]): void;
+function myCoolFunction(f: (x: number) => void, ...nums: number[]): void;
+function myCoolFunction() {
+  if (arguments.length == 2 && !Array.isArray(arguments[1])) {
+    var f = arguments[0];
+    var arr = arguments[1];
+    // ...
+  }
+  // ...
+}
+```
+
+上例中，我们为`myCoolFunction`添加了两个重载签名。第一个重载会检查第一个参数是否是函数（且参数类型为`number`），然后检查第二个参数是否为`number`数组。第二个重载对第一个参数进行相同的检查，然后检查第二个参数是否是剩余参数([rest parameter](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/rest_parameters))（这里是...nums，类型为`number`数组）。
 
