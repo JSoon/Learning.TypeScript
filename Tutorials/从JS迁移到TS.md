@@ -273,3 +273,123 @@ function myCoolFunction() {
 
 上例中，我们为`myCoolFunction`添加了两个重载签名。第一个重载会检查第一个参数是否是函数（且参数类型为`number`），然后检查第二个参数是否为`number`数组。第二个重载对第一个参数进行相同的检查，然后检查第二个参数是否是剩余参数([rest parameter](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/rest_parameters))（这里是...nums，类型为`number`数组）。
 
+### 按顺序添加属性 (Sequentially Added Properties)
+
+一些人（大多数人）可能认为先创建对象，然后再给对象添加属性这样显得方便并且美观：
+
+```js
+// let options: {}
+let options = {};
+// 错误，Property 'color' does not exist on type '{}'.
+options.color = "red";
+// 错误，Property 'volume' does not exist on type '{}'.
+options.volume = 11;
+```
+
+TypeScript会警告我们`color`和`volume`不能指派给`options`，因为首先，编译器会认为`options`的类型是不具有任何属性的字面量对象`{}`。如果我们一开始就将所有属性声明放入字面量对象中，则不会出现错误。
+
+```ts
+let options = {
+  color: "red",
+  volume: 11
+};
+options.color = "black";
+```
+
+更能充分利用TypeScript类型检测的方法是，首先定义一个接口来描述我们的对象类型，然后在声明字面量对象时加上类型断言：
+
+```ts
+interface Options {
+  color: string;
+  volume: number;
+}
+
+let options = {} as Options;
+options.color = "red";
+options.volume = 11;
+```
+
+当然我们也可以简单通过将`options`的类型指定为`any`，但是这样做的话，使用TypeScript就失去意义了。
+
+### any，Object和{} (any, Object, and {})
+
+我们可能尝试使用`Object`或者`{}`来描述一个能够拥有任何属性的对象，因为大多数情况下，`Object`是最通用的类型。但是，实际上`any`才是在这些情况下我们想要的，因为`any`才是最***灵活***的类型。
+
+比如说我们有一个变量被声明为了`Object`类型，那么调用这个变量的`toLowerCase()`方法是不可行的（因为Object是所有类的基类，它并不具有String类的方法）。过于通用的类型意味着我们能够使用强类型做的事情更少，但是`any`比较特殊，因为我们能够对使用这种类型的对象做任何事情。例如我们可以直接调用任何方法，对其进行任何形式的构建，访问它的任何成员等等：
+
+```ts
+let myCloth: any;
+
+myCloth.color // OK
+myCloth.destroy() // OK
+myCloth = { // OK
+  color: "red",
+  size: "L"
+}
+```
+
+> 注：当我们在任何情况下使用`any`时，都会失去大部分的类型错误检测和编辑器对TypeScript的支持。所以，且用且珍惜！
+
+并且，当我们最终决定使用`Object`和`{}`时，请选择使用`{}`。尽管它们几乎一样，但是从技术上说，字面量`{}`类型在一些特定的情况下是比`Object`更加通用的类型（暂时还未完全理解）。
+
+## 得到更严格的检测 (Getting Stricter Checks)
+
+TypeScript为程序带来了更加安全且具备分析能力的检测。一旦将程序的代码转换为TypeScript，我们就能够启用这些更加安全的检测。
+
+### 没有默认的any (No Implicit any)
+
+在一些特定的情况下，TypeScript无法确定具体的数据类型。为了尽可能放宽限制，编译器将认为这些类型为`any`。虽然这对代码迁移有好处（例如减少了开发者的工作量和深入学习成本），但这也意味着我们失去了类型的安全性，而且我们也失去了其他相同工具的支撑。好消息是，我们可以通过开启`noImplicitAny`选项来捕获这些错误并进行修复。
+
+### 严格的null & undefined检查 (Strict null & undefined Checks)
+
+默认情况下，TypeScript假设`null`和`undefined`属于任何类型。这意味着任何其他类型的变量都能够被赋值为`null`和`undefined`。显然这是不严谨的，因为如果一个变量属于`string`类型，那么它的默认值应该是`''`而不是`null`或`undefined`的其中一种。同理如果一个变量属于`number[]`类型，那么它的默认值应该是`[]`。这无论是在JavaScript和TypeScript中，都属于常见的bugs，因为它们很可能导致边界错误（[Edge Cases](https://en.wikipedia.org/wiki/Edge_case)）。同样，我们可以通过开启`strictNullChecks`对这些潜在的问题进行捕获。
+
+当`strictNullChecks`开启时，`null`和`undefined`拥有了各自的类型，分别是`null`和`undefined`。在任何***可能***是`null`的情况下，我们都能够使用联合类型来进行类型注释。所以例如，如果一个变量可能是`numder`或者`null`，我们可以将其注释为`number | null`。
+
+还有一种情况是，如果TypeScript认为一个值可能为`null`或者`undefined`，但是我们能肯定它不是这两个值中的一种，也可以通过使用后缀`!`操作符来告知编译器：我知道这样做时对的（也许）：
+
+```ts
+declare var foo: string[] | null;
+
+// 错误，'foo'可能是'null'，而'null'没有'length'属性
+foo.length; // error - 'foo' is possibly 'null'
+// 正确，告诉编译器，我们确定'foo'是'string[]'类型
+foo!.length; // okay - 'foo!' just has type 'string[]'
+```
+
+> 注：当使用`strictNullChecks`时，依赖库也需要相应地开启`strictNullChecks`。
+
+### 没有默认的this (No Implicit this)
+
+当在类的外部使用`this`关键字时，它的类型默认为`any`。例如，试想有一个`Point`类，并且我们想为该类添加一个函数方法： 
+
+```ts
+class Point {
+  constructor(public x, public y) {}
+  getDistance(p: Point) {
+    let dx = p.x - this.x;
+    let dy = p.y - this.y;
+    return Math.sqrt(dx ** 2 + dy ** 2);
+  }
+}
+// ...
+
+// Reopen the interface.
+// 再声明一个同名接口，声明一个函数签名
+interface Point {
+  distanceFromOrigin(): number;
+}
+Point.prototype.distanceFromOrigin = function() {
+  return this.getDistance({ x: 0, y: 0 });
+};
+```
+
+默认情况下，上述代码没有任何问题。但是正如我们所说，类外部的`this`默认为`any`类型，也就意味着，假如我们在`distanceFromOrigin`中，将`this.getDistance`写成了`this.getDistace`，编译器不会报任何错误。这就对修复错误很不友好了，所以我们需要明确此时`this`的指向类型。通过开启`noImplicitThis`选项，编译器会告诉我们这里的`this`指向不明确。为了修复这个错误，我们需要在参数的第一位，也是隐藏位，显式地对`this`进行类型注释：
+
+```ts
+Point.prototype.distanceFromOrigin = function(this: Point) {
+  return this.getDistance({ x: 0, y: 0 });
+};
+```
+
+此时，由于`this`为`Point`类型，当由于马虎造成了拼写错误时，编译器则会提示我们`Point`上没有`getDistace`这个方法。

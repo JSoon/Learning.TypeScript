@@ -79,4 +79,31 @@ options.color = "red";
 options.volume = 11;
 options.vol1ume = 11;
 
-let myCloth;
+let myCloth: any;
+
+myCloth.color // OK
+myCloth.destroy() // OK
+myCloth = { // OK
+  color: "red",
+  size: "L"
+}
+
+let helloStrict: number[] = [1, 2, 3]
+
+class Point2 {
+  constructor(public x: number, public y: number) {}
+  getDistance(p: Point) {
+    let dx = p.x - this.x;
+    let dy = p.y - this.y;
+    return Math.sqrt(dx ** 2 + dy ** 2);
+  }
+}
+// ...
+
+// Reopen the interface.
+interface Point2 {
+  distanceFromOrigin(): number;
+}
+Point2.prototype.distanceFromOrigin = function() {
+  return this.getDistance({ x: 0, y: 0 });
+};
