@@ -72,3 +72,25 @@ options.color = "red";
 options.volume = 11;
 options.vol1ume = 11;
 var myCloth;
+myCloth.color; // OK
+myCloth.destroy(); // OK
+myCloth = {
+    color: "red",
+    size: "L"
+};
+var helloStrict = [1, 2, 3];
+var Point2 = /** @class */ (function () {
+    function Point2(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    Point2.prototype.getDistance = function (p) {
+        var dx = p.x - this.x;
+        var dy = p.y - this.y;
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    };
+    return Point2;
+}());
+Point2.prototype.distanceFromOrigin = function () {
+    return this.getDistance({ x: 0, y: 0 });
+};
